@@ -9,7 +9,7 @@ services:
   director:
     image: agoldis/sorry-cypress-director:latest
     environment:
-      DASHBOARD_URL: http://localhost:8080
+      DASHBOARD_URL: http://20.25.60.60:8080
       MONGODB_URI: 'mongodb://mongo:27017'
       MONGODB_DATABASE: 'sorry-cypress'
       EXECUTION_DRIVER: '../execution/mongo/driver'
@@ -35,7 +35,7 @@ services:
   dashboard:
     image: agoldis/sorry-cypress-dashboard:latest
     environment:
-      GRAPHQL_SCHEMA_URL: http://localhost:4000
+      GRAPHQL_SCHEMA_URL: http://20.25.60.60:4000
       GRAPHQL_CLIENT_CREDENTIALS: ''
       CI_URL: ''
       PORT: 8080
