@@ -72,7 +72,7 @@ services:
     entrypoint: >
       /bin/sh -c "
       sleep 3;
-      /usr/bin/mc config host add myminio http://storage:9000 MW32h3gd6HvjBEgTRx t6NgQWUcEyG2AzaDCVkN6sbWcvDCVkN6sGiZ7;
+      /usr/bin/mc config host add myminio http://cypressdashboard.eastus.cloudapp.azure.com:9000 MW32h3gd6HvjBEgTRx t6NgQWUcEyG2AzaDCVkN6sbWcvDCVkN6sGiZ7;
       /usr/bin/mc rm -r --dangerous --force myminio/sorry-cypress;
       /usr/bin/mc mb myminio/sorry-cypress;
       /usr/bin/mc policy set download myminio/sorry-cypress;
