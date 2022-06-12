@@ -61,7 +61,7 @@ services:
       MINIO_SECRET_KEY: 't6NgQWUcEyG2AzaDCVkN6sbWcvDCVkN6sGiZ7'
     volumes:
       - ./data/data-minio-cypress:/data
-    command: server /data
+    command: server --console-address :9000 /data
     ports:
       - 9000:9000
 
