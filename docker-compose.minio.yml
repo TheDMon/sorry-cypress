@@ -54,16 +54,18 @@ services:
       - api
 
   storage:
-    image: minio/minio
-    hostname: 'storage'
+    image: minio/minio:latest
+    container_name: storage
+    volumes:
+      - ./data/data-minio-cypress:/data
+      - ./data/donf-minio-cypress:/root/.minio
+    ports:
+      - 9000:9000
     environment:
       MINIO_ACCESS_KEY: 'MW32h3gd6HvjBEgTRx'
       MINIO_SECRET_KEY: 't6NgQWUcEyG2AzaDCVkN6sbWcvDCVkN6sGiZ7'
-    volumes:
-      - ./data/data-minio-cypress:/data
     command: server --console-address :9000 /data
-    ports:
-      - 9000:9000
+
 
   createbuckets:
     image: minio/mc
