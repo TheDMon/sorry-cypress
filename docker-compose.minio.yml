@@ -54,11 +54,10 @@ services:
       - api
 
   storage:
-    image: minio/minio:latest
-    container_name: storage
+    image: minio/minio
+    hostname: 'storage'
     volumes:
       - ./data/data-minio-cypress:/data
-      - ./data/donf-minio-cypress:/root/.minio
     ports:
       - 9000:9000
       - 9001:9001
