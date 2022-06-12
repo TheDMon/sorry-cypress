@@ -61,10 +61,11 @@ services:
       - ./data/donf-minio-cypress:/root/.minio
     ports:
       - 9000:9000
+      - 9001:9001
     environment:
       MINIO_ACCESS_KEY: 'MW32h3gd6HvjBEgTRx'
       MINIO_SECRET_KEY: 't6NgQWUcEyG2AzaDCVkN6sbWcvDCVkN6sGiZ7'
-    command: server --console-address :9000 /data
+    command: server --console-address :9001 /data
 
 
   createbuckets:
