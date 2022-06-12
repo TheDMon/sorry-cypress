@@ -343,7 +343,7 @@ export const Sidebar: SidebarType = ({ open, onToggleSidebar }) => {
           <ListItemAvatar sx={{ minWidth: '42px' }}>
             <RouterLink to="/">
               <Avatar
-                alt="Sorry Cypress Dashboard Home"
+                alt="JDBB Cypress Dashboard Home"
                 src={logoDark}
                 variant="square"
                 sx={{
@@ -359,7 +359,7 @@ export const Sidebar: SidebarType = ({ open, onToggleSidebar }) => {
             sx={{
               m: smallScreen ? 1 : 0,
             }}
-            primary={<span>Sorry Cypress</span>}
+            primary={<span>JDBB Cypress</span>}
             primaryTypographyProps={{
               sx: {
                 transition: 'all 0.3s',

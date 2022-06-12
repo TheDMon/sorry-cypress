@@ -6,7 +6,7 @@ import React, { FunctionComponent } from 'react';
 export const LegacyRunChip: LegacyRunChipComponent = () => {
   return (
     <Tooltip
-      title="This is a legacy run created prior to Sorry Cypress 2.0. Some information may be missing."
+      title="This is a legacy run created prior to JDBB Cypress 2.0. Some information may be missing."
       arrow
     >
       <Chip

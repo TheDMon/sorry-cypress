@@ -44,7 +44,7 @@ export const validateCypressVersion = (
       new GenericResponseError(
         `Cypress version ${cypressVersion} is not supported`,
         [
-          'Sorry Cypress only supports cypress version gte 6.7.0. Please update cypress package.',
+          'JDBB Cypress only supports cypress version gte 6.7.0. Please update cypress package.',
         ]
       )
     );

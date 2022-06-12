@@ -10,7 +10,7 @@ services:
   director:
     image: agoldis/sorry-cypress-director:latest
     environment:
-      DASHBOARD_URL: http://localhost:8080
+      DASHBOARD_URL: http://cypressdashboard.eastus.cloudapp.azure.com:8080
       EXECUTION_DRIVER: '../execution/mongo/driver'
       MONGODB_URI: 'mongodb://mongo:27017'
       MONGODB_DATABASE: 'sorry-cypress'
@@ -19,7 +19,7 @@ services:
       MINIO_ACCESS_KEY: 'MW32h3gd6HvjBEgTRx'
       MINIO_SECRET_KEY: 't6NgQWUcEyG2AzaDCVkN6sbWcvDCVkN6sGiZ7'
       MINIO_ENDPOINT: 'storage'
-      MINIO_URL: 'http://localhost'
+      MINIO_URL: 'http://cypressdashboard.eastus.cloudapp.azure.com'
       MINIO_PORT: '9000'
       MINIO_USESSL: 'false'
       MINIO_BUCKET: sorry-cypress
@@ -43,7 +43,7 @@ services:
   dashboard:
     image: agoldis/sorry-cypress-dashboard:latest
     environment:
-      GRAPHQL_SCHEMA_URL: http://localhost:4000
+      GRAPHQL_SCHEMA_URL: http://cypressdashboard.eastus.cloudapp.azure.com:4000
       GRAPHQL_CLIENT_CREDENTIALS: ''
       PORT: 8080
       CI_URL: ''

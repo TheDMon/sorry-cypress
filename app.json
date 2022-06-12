@@ -1,5 +1,5 @@
 {
-  "name": "Sorry Cypress",
+  "name": "JDBB Cypress",
   "description": "Open source, self-hosted alternative to Cypress dashboard",
   "keywords": ["cypress", "testing", "e2e", "UI test", "open source"],
   "website": "https://github.com/agoldis/sorry-cypress",
