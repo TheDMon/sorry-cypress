@@ -1,0 +1,12 @@
+version: '3.6'
+
+services:
+  dashboard:
+    image: asishdas1985/jdbb-cypress-dashboard:latest
+    environment:
+      GRAPHQL_SCHEMA_URL: http://cypressdashboard.eastus.cloudapp.azure.com:4000
+      GRAPHQL_CLIENT_CREDENTIALS: ''
+      PORT: 8080
+      CI_URL: ''
+    ports:
+      - 8080:8080

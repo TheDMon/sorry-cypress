@@ -1,4 +1,4 @@
-import { Loop as LoopIcon } from '@mui/icons-material';
+import { Loop as LoopIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
 import { Alert, AlertTitle, Skeleton } from '@mui/material';
 import {
   GetInstanceQuery,
@@ -8,6 +8,7 @@ import {
   useAutoRefresh,
   useAutoRefreshRate,
 } from '@sorry-cypress/dashboard/hooks/useAutoRefresh';
+import { useHideSuccessfulTests } from '@sorry-cypress/dashboard/hooks';
 import {
   getInstancePath,
   getProjectPath,
@@ -23,7 +24,7 @@ import { InstanceSummary } from './instanceSummary';
 
 export const InstanceDetailsView: InstanceDetailsViewComponent = () => {
   const { id, itemId, testId } = useParams();
-
+  const [hidePassedTests, setHidePassedTests] = useHideSuccessfulTests();
   const [shouldAutoRefresh, setShouldAutoRefresh] = useAutoRefresh();
   const autoRefreshRate = useAutoRefreshRate();
   const { loading, error, data } = useGetInstanceQuery({
@@ -73,6 +74,16 @@ export const InstanceDetailsView: InstanceDetailsViewComponent = () => {
       <Toolbar
         actions={[
           {
+            key: 'hidePassedTests',
+            text: 'Hide Successful Tests',
+            icon: VisibilityOffIcon,
+            selected: hidePassedTests,
+            toggleButton: true,
+            onClick: () => {
+              setHidePassedTests(!hidePassedTests);
+            },
+          },
+          {
             key: 'autoRefresh',
             text: 'Auto Refresh',
             icon: LoopIcon,
@@ -89,6 +100,7 @@ export const InstanceDetailsView: InstanceDetailsViewComponent = () => {
       <InstanceDetails
         instance={data.instance}
         selectedItem={itemId || testId}
+        hidePassedTests={hidePassedTests}
       />
     </>
   );

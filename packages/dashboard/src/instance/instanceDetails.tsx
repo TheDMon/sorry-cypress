@@ -38,7 +38,7 @@ import { TestDetailsView } from '../testItem/testDetailsView';
 import { getTestDuration, getTestStartedAt } from './util';
 
 export const InstanceDetails: InstanceDetailsComponent = (props) => {
-  const { instance, selectedItem } = props;
+  const { instance, selectedItem, hidePassedTests } = props;
 
   const navigate = useNavigate();
   const theme = useTheme();
@@ -79,7 +79,7 @@ export const InstanceDetails: InstanceDetailsComponent = (props) => {
     nodeIds,
     testsMap,
     firstItem,
-  } = getTreeOfNavigationItems(instance);
+  } = getTreeOfNavigationItems(instance, hidePassedTests);
   const [expanded, setExpanded] = useState<string[]>(nodeIds);
   const [selected, setSelected] = useState<any>(firstItem);
 
@@ -325,9 +325,9 @@ export const InstanceDetails: InstanceDetailsComponent = (props) => {
   );
 };
 
-function getTreeOfNavigationItems(instance: GetInstanceQuery['instance']) {
+function getTreeOfNavigationItems(instance: GetInstanceQuery['instance'], hidePassedTests: boolean) {
   const nodeIds: string[] = [];
-  const tests = instance?.results?.tests;
+  let tests = instance?.results?.tests;
   const navigationTree = new Map<string, NavigationItem>();
   let firstItem: any = null;
 
@@ -352,6 +352,11 @@ function getTreeOfNavigationItems(instance: GetInstanceQuery['instance']) {
       testsMap: {},
       firstItem,
     };
+  }
+
+  // here we should filter out tests based on status
+  if(hidePassedTests){
+    tests = tests.filter((test: any) => test.state === 'failed')
   }
 
   // Add tests as navigation items to the navigation tree
