@@ -92,6 +92,10 @@ export const InstanceDetails: InstanceDetailsComponent = (props) => {
   };
 
   useEffect(() => {
+    setExpanded(nodeIds);
+  }, nodeIds);
+
+  useEffect(() => {
     if (selectedItem === 'RECORDED_VIDEO') {
       setSelected({
         nodeId: selectedItem,
@@ -101,10 +105,6 @@ export const InstanceDetails: InstanceDetailsComponent = (props) => {
       setSelected({ nodeId: selectedItem, data: testsMap[selectedItem] });
     }
   }, [selectedItem]);
-
-  useEffect(() => {
-    setExpanded(nodeIds);
-  }, nodeIds);
 
   const handleToggleNavigationPanel = () => {
     if (showNavigationPanel) {
