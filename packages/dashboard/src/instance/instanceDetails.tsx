@@ -102,6 +102,10 @@ export const InstanceDetails: InstanceDetailsComponent = (props) => {
     }
   }, [selectedItem]);
 
+  useEffect(() => {
+    setExpanded(nodeIds);
+  }, nodeIds);
+
   const handleToggleNavigationPanel = () => {
     if (showNavigationPanel) {
       setCollapseExitAnimationFinished(false);
@@ -349,7 +353,7 @@ function getTreeOfNavigationItems(
   }
 
   // if instance has no tests return the navigation tree
-  if (!tests?.length || tests?.length === 0) {
+  if (!tests?.length) {
     return {
       navigationTree,
       nodeIds: nodeIds,

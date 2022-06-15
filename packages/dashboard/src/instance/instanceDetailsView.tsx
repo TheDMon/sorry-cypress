@@ -1,4 +1,7 @@
-import { Loop as LoopIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
+import {
+  Loop as LoopIcon,
+  VisibilityOff as VisibilityOffIcon,
+} from '@mui/icons-material';
 import { Alert, AlertTitle, Skeleton } from '@mui/material';
 import {
   GetInstanceQuery,
@@ -8,7 +11,6 @@ import {
   useAutoRefresh,
   useAutoRefreshRate,
 } from '@sorry-cypress/dashboard/hooks/useAutoRefresh';
-import { useHideSuccessfulTests } from '@sorry-cypress/dashboard/hooks';
 import {
   getInstancePath,
   getProjectPath,
@@ -16,7 +18,7 @@ import {
   NavItemType,
   setNav,
 } from '@sorry-cypress/dashboard/lib/navigation';
-import React, { FunctionComponent, useLayoutEffect } from 'react';
+import React, { FunctionComponent, useLayoutEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Paper, Toolbar } from '../components';
 import { InstanceDetails } from './instanceDetails';
@@ -24,7 +26,7 @@ import { InstanceSummary } from './instanceSummary';
 
 export const InstanceDetailsView: InstanceDetailsViewComponent = () => {
   const { id, itemId, testId } = useParams();
-  const [hidePassedTests, setHidePassedTests] = useHideSuccessfulTests();
+  const [hidePassedTests, setHidePassedTests] = useState(false);
   const [shouldAutoRefresh, setShouldAutoRefresh] = useAutoRefresh();
   const autoRefreshRate = useAutoRefreshRate();
   const { loading, error, data } = useGetInstanceQuery({
