@@ -339,6 +339,15 @@ function getTreeOfNavigationItems(
       : null;
   }
 
+  // here we should filter out tests based on status
+  if (hidePassedTests) {
+    tests = tests?.filter((test) => test.state === 'failed');
+
+    if (!instance?.results?.videoUrl) {
+      firstItem = null;
+    }
+  }
+
   // if instance has no tests return the navigation tree
   if (!tests?.length) {
     return {
@@ -347,11 +356,6 @@ function getTreeOfNavigationItems(
       testsMap: {},
       firstItem,
     };
-  }
-
-  // here we should filter out tests based on status
-  if (hidePassedTests) {
-    tests = tests.filter((test: any) => test.state === 'failed');
   }
 
   // Add tests as navigation items to the navigation tree
