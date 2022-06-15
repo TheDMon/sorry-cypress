@@ -353,7 +353,7 @@ function getTreeOfNavigationItems(
   }
 
   // if instance has no tests return the navigation tree
-  if (!tests?.length) {
+  if (!tests?.length || tests?.length === 0) {
     return {
       navigationTree,
       nodeIds: nodeIds,
