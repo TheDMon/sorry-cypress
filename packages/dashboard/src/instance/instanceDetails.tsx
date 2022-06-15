@@ -44,14 +44,10 @@ export const InstanceDetails: InstanceDetailsComponent = (props) => {
   const theme = useTheme();
   const isSmScreenOrSmaller = useMediaQuery(theme.breakpoints.down('md'));
   const [showNavigationPanel, setShowNavigationPanel] = useState(true);
-  const [
-    collapseEnterAnimationFinished,
-    setCollapseEnterAnimationFinished,
-  ] = useState(true);
-  const [
-    collapseExitAnimationFinished,
-    setCollapseExitAnimationFinished,
-  ] = useState(true);
+  const [collapseEnterAnimationFinished, setCollapseEnterAnimationFinished] =
+    useState(true);
+  const [collapseExitAnimationFinished, setCollapseExitAnimationFinished] =
+    useState(true);
 
   if (!instance?.results) {
     return <p>No results yet for the spec</p>;
@@ -74,12 +70,8 @@ export const InstanceDetails: InstanceDetailsComponent = (props) => {
     );
   }
 
-  const {
-    navigationTree,
-    nodeIds,
-    testsMap,
-    firstItem,
-  } = getTreeOfNavigationItems(instance, hidePassedTests);
+  const { navigationTree, nodeIds, testsMap, firstItem } =
+    getTreeOfNavigationItems(instance, hidePassedTests);
   const [expanded, setExpanded] = useState<string[]>(nodeIds);
   const [selected, setSelected] = useState<any>(firstItem);
 
@@ -325,7 +317,10 @@ export const InstanceDetails: InstanceDetailsComponent = (props) => {
   );
 };
 
-function getTreeOfNavigationItems(instance: GetInstanceQuery['instance'], hidePassedTests: boolean) {
+function getTreeOfNavigationItems(
+  instance: GetInstanceQuery['instance'],
+  hidePassedTests: boolean
+) {
   const nodeIds: string[] = [];
   let tests = instance?.results?.tests;
   const navigationTree = new Map<string, NavigationItem>();
@@ -355,8 +350,8 @@ function getTreeOfNavigationItems(instance: GetInstanceQuery['instance'], hidePa
   }
 
   // here we should filter out tests based on status
-  if(hidePassedTests){
-    tests = tests.filter((test: any) => test.state === 'failed')
+  if (hidePassedTests) {
+    tests = tests.filter((test: any) => test.state === 'failed');
   }
 
   // Add tests as navigation items to the navigation tree
@@ -409,5 +404,6 @@ type NavigationItem = {
 type InstanceDetailsProps = {
   instance: GetInstanceQuery['instance'];
   selectedItem?: string;
+  hidePassedTests: boolean;
 };
 type InstanceDetailsComponent = FunctionComponent<InstanceDetailsProps>;
