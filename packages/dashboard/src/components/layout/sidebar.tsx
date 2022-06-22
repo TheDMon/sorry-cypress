@@ -2,10 +2,6 @@ import { useReactiveVar } from '@apollo/client';
 import {
   Book as BookIcon,
   Close as CloseIcon,
-  Favorite as FavoriteIcon,
-  FavoriteBorder as FavoriteBorderIcon,
-  GitHub as GitHubIcon,
-  Help as HelpIcon,
   PlayLesson as PlayLessonIcon,
   Settings as SettingsIcon,
 } from '@mui/icons-material';
@@ -28,7 +24,6 @@ import {
   Tooltip,
   useMediaQuery,
 } from '@mui/material';
-import { red } from '@mui/material/colors';
 import {
   createTheme,
   styled,
@@ -481,7 +476,7 @@ export const Sidebar: SidebarType = ({ open, onToggleSidebar }) => {
           </Alert>
         )}
       </List>
-      <DrawerFooter open={open}>
+      {/* <DrawerFooter open={open}>
         <div>
           {!open && (
             <Tooltip title="Source" placement="right" arrow>
@@ -603,7 +598,7 @@ export const Sidebar: SidebarType = ({ open, onToggleSidebar }) => {
             </IconButton>
           </Tooltip>
         </div>
-      </DrawerFooter>
+      </DrawerFooter> */}
     </DrawerContentContainer>
   );
 
