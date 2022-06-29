@@ -88,7 +88,7 @@ const NoProjects: NoProjectsComponent = () => {
               >
                 <Grid item maxWidth={350}>
                   <Typography variant="h5" mb={4} color="text.secondary">
-                    Welcome to JDBB Cypress!
+                    Welcome to Cypress Dashboard!
                   </Typography>
 
                   <Typography variant="body2" mb={1}>

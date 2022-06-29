@@ -1,4 +1,6 @@
 import {
+  CloudDownloadRounded,
+  Launch,
   Loop as LoopIcon,
   VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
@@ -20,7 +22,13 @@ import {
   setNav,
 } from '@sorry-cypress/dashboard/lib/navigation';
 import { RunSummary } from '@sorry-cypress/dashboard/run/runSummary/runSummary';
-import React, { FunctionComponent, useLayoutEffect } from 'react';
+import { environment } from '@sorry-cypress/dashboard/state/environment';
+import React, {
+  FunctionComponent,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import { useParams } from 'react-router-dom';
 import { RunDetails } from './runDetails';
 
@@ -29,6 +37,7 @@ export const RunDetailsView: RunDetailsViewComponent = () => {
   const autoRefreshRate = useAutoRefreshRate();
   const [hidePassedSpecs, setHidePassedSpecs] = useHideSuccessfulSpecs();
   const [shouldAutoRefresh, setShouldAutoRefresh] = useAutoRefresh();
+  const [reportName, setReportName] = useState('');
 
   const { loading, error, data } = useGetRunQuery({
     variables: { runId: id! },
@@ -37,10 +46,79 @@ export const RunDetailsView: RunDetailsViewComponent = () => {
 
   updateNav(data);
 
+  const checkReport = (data?: GetRunQuery) => {
+    if (!data) {
+      return;
+    }
+
+    const ciBuildId = data?.run?.meta.ciBuildId.replace('#', '%23');
+    fetch(`/artifactrepo/reportname?ciBuildId=${ciBuildId}`)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.data === 'FOLDER NOT FOUND') {
+          setReportName('');
+        } else {
+          setReportName(result.data);
+        }
+      });
+  };
+
+  useEffect(() => {
+    checkReport(data);
+  }, [data]);
+
+  const downloadReportHanlder = (data: GetRunQuery) => {
+    const ciBuildId = data?.run?.meta.ciBuildId.replace('#', '%23');
+    fetch(
+      `/artifactrepo/download?ciBuildId=${ciBuildId}&reportName=${reportName}`
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        const blob = new Blob([result.body], {
+          type: 'text/html',
+        });
+
+        const mynavigator: any = navigator;
+        if (mynavigator.msSaveBlob) {
+          mynavigator.msSaveBlob(blob, reportName);
+        } else {
+          const link = document.createElement('a');
+          const url = URL.createObjectURL(blob);
+          link.setAttribute('href', url);
+          link.setAttribute('download', reportName);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('something went wrong!');
+      });
+  };
+
   if (loading)
     return (
       <>
         <Grid container justifyContent="right" spacing={1}>
+          <Grid item>
+            <Skeleton
+              variant="rectangular"
+              height={37}
+              width={100}
+              sx={{ mb: 2 }}
+              animation="wave"
+            />
+          </Grid>
+          <Grid item>
+            <Skeleton
+              variant="rectangular"
+              height={37}
+              width={100}
+              sx={{ mb: 2 }}
+              animation="wave"
+            />
+          </Grid>
           <Grid item>
             <Skeleton
               variant="rectangular"
@@ -98,6 +176,37 @@ export const RunDetailsView: RunDetailsViewComponent = () => {
     <>
       <Toolbar
         actions={[
+          {
+            key: 'download',
+            text: 'Download',
+            icon: CloudDownloadRounded,
+            toggleButton: true,
+            onClick: () => {
+              if (reportName !== '') {
+                return downloadReportHanlder(data);
+              } else {
+                alert(
+                  'Report is not yet available for download. Please visit later.'
+                );
+              }
+            },
+          },
+          {
+            key: 'openRunLog',
+            text: 'Open Jenkins Logs',
+            icon: Launch,
+            toggleButton: true,
+            onClick: () => {
+              const ciBuildId = data.run?.meta.ciBuildId;
+              const jenkinsRunId = ciBuildId?.substring(
+                ciBuildId?.indexOf('#') + 1,
+                ciBuildId.length
+              );
+              let url = `${environment.JENKINS_BASE_URL}/blue/organizations/jenkins/${environment.JENKINS_JOB_FOLDER}%2F${environment.JENKINS_JOB_NAME}/detail/${environment.JENKINS_JOB_NAME}/${jenkinsRunId}/pipeline/`;
+              url = url.replace(/ /g, '%20');
+              window.open(url, '_blank');
+            },
+          },
           {
             key: 'hidePassedSpecs',
             text: 'Hide Successful Specs',

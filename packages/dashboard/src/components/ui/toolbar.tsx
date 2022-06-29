@@ -60,6 +60,7 @@ export const Toolbar: ToolbarComponent = (props) => {
         xs={12}
         justifyContent="flex-end"
         alignItems="center"
+        columnSpacing={1}
         mb={{ xs: 1, lg: 0 }}
         mr={{ xs: 0, lg: onSearch ? 2 : 0 }}
       >
@@ -148,15 +149,15 @@ export const Toolbar: ToolbarComponent = (props) => {
             </Menu>
           </Grid>
         )}
+        {onSearch && (
+          <Grid item xs={12} lg="auto">
+            <SearchField
+              placeholder={searchPlaceholder || 'Search'}
+              onSearch={onSearch}
+            />
+          </Grid>
+        )}
       </Grid>
-      {onSearch && (
-        <Grid item xs={12} lg="auto">
-          <SearchField
-            placeholder={searchPlaceholder || 'Search'}
-            onSearch={onSearch}
-          />
-        </Grid>
-      )}
     </Grid>
   );
 };
