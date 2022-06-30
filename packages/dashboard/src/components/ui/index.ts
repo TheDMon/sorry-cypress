@@ -1,3 +1,4 @@
+export * from './alert-modal';
 export * from './card';
 export * from './chip';
 export * from './expandableArea';

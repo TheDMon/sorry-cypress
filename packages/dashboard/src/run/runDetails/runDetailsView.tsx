@@ -30,6 +30,7 @@ import React, {
   useState,
 } from 'react';
 import { useParams } from 'react-router-dom';
+import { AlertModal, AlertType } from '../../components/ui';
 import { RunDetails } from './runDetails';
 
 export const RunDetailsView: RunDetailsViewComponent = () => {
@@ -38,6 +39,10 @@ export const RunDetailsView: RunDetailsViewComponent = () => {
   const [hidePassedSpecs, setHidePassedSpecs] = useHideSuccessfulSpecs();
   const [shouldAutoRefresh, setShouldAutoRefresh] = useAutoRefresh();
   const [reportName, setReportName] = useState('');
+  const [shouldShowModal, setShowModal] = React.useState(false);
+  const [alertTitle, setAlertTitle] = React.useState('');
+  const [alertMessage, setAlertMessage] = React.useState('');
+  const [alertType, setAlertType] = React.useState(AlertType.Success);
 
   const { loading, error, data } = useGetRunQuery({
     variables: { runId: id! },
@@ -90,10 +95,15 @@ export const RunDetailsView: RunDetailsViewComponent = () => {
           link.click();
           document.body.removeChild(link);
         }
+
+        setShowModal(false);
       })
       .catch((err) => {
         console.log(err);
-        alert('something went wrong!');
+        setAlertTitle('Something went wrong');
+        setAlertMessage(err?.toString());
+        setAlertType(AlertType.Error);
+        setShowModal(true);
       });
   };
 
@@ -182,12 +192,28 @@ export const RunDetailsView: RunDetailsViewComponent = () => {
             icon: CloudDownloadRounded,
             toggleButton: true,
             onClick: () => {
-              if (reportName !== '') {
-                return downloadReportHanlder(data);
-              } else {
-                alert(
-                  'Report is not yet available for download. Please visit later.'
+              if (reportName !== '' && data.run?.completion?.completed) {
+                setAlertTitle('Downloading Report');
+                setAlertMessage(
+                  'Please wait while we are retriving the report from remote Server. It may take a while.'
                 );
+                setAlertType(AlertType.Success);
+                setShowModal(true);
+                return downloadReportHanlder(data);
+              } else if (reportName === '' && data.run?.completion?.completed) {
+                setAlertTitle('Report Unavailable');
+                setAlertMessage(
+                  `The report isn't present in artifactory. Please see Jenkins Log of the run to know more.`
+                );
+                setAlertType(AlertType.Error);
+                setShowModal(true);
+              } else {
+                setAlertTitle('Please wait');
+                setAlertMessage(
+                  'The report will be avaiable for download once the test execution completes. It may take a while, please visit later.'
+                );
+                setAlertType(AlertType.Information);
+                setShowModal(true);
               }
             },
           },
@@ -240,6 +266,15 @@ export const RunDetailsView: RunDetailsViewComponent = () => {
         Spec Files
       </Typography>
       <RunDetails run={data.run} hidePassedSpecs={hidePassedSpecs} />
+      <AlertModal
+        open={shouldShowModal}
+        title={alertTitle}
+        message={alertMessage}
+        type={alertType}
+        onClose={() => {
+          setShowModal(false);
+        }}
+      />
     </>
   );
 };

@@ -5,7 +5,11 @@ import {
   HourglassDisabled,
   Loop as LoopIcon,
 } from '@mui/icons-material';
-import { Toolbar } from '@sorry-cypress/dashboard/components';
+import {
+  AlertModal,
+  AlertType,
+  Toolbar,
+} from '@sorry-cypress/dashboard/components';
 import {
   getProjectPath,
   NavItemType,
@@ -29,6 +33,10 @@ export const RunsView: RunsViewComponent = () => {
   const [compactView, setCompactView] = useState(false);
   const [shouldAutoRefresh, setShouldAutoRefresh] = useAutoRefresh();
   const [enableRun, setEnableRun] = useState(true);
+  const [shouldShowModal, setShowModal] = React.useState(false);
+  const [alertTitle, setAlertTitle] = React.useState('');
+  const [alertMessage, setAlertMessage] = React.useState('');
+  const [alertType, setAlertType] = React.useState(AlertType.Success);
 
   const getJenkinsBuildStatus = () => {
     fetch('/jenkins/buildStatus')
@@ -65,6 +73,36 @@ export const RunsView: RunsViewComponent = () => {
     ]);
   }, []);
 
+  const jobQueueHandler = () => {
+    if (enableRun) {
+      fetch('/jenkins/run').then((response) => {
+        if (response.status === 500) {
+          setAlertTitle('Something went wrong');
+          setAlertMessage(
+            `Unable to queue a Job. Please ensure the job is setup to be triggered remotely.`
+          );
+          setAlertType(AlertType.Error);
+          setShowModal(true);
+        } else {
+          setEnableRun(false);
+          setAlertTitle('Job Queued');
+          setAlertMessage(`Test execution job has been queued successfully! 
+                            Please wait a while for it to appear on the dashboard. 
+                            Hit 'Auto Refresh' on to see live updates.`);
+          setAlertType(AlertType.Success);
+          setShowModal(true);
+        }
+      });
+    } else {
+      setAlertTitle('Please wait');
+      setAlertMessage(
+        'A test execution job is already in progress. Please wait until it is finished.'
+      );
+      setAlertType(AlertType.Information);
+      setShowModal(true);
+    }
+  };
+
   return (
     <>
       <Toolbar
@@ -77,22 +115,7 @@ export const RunsView: RunsViewComponent = () => {
             selected: enableRun,
             toggleButton: true,
             onClick: () => {
-              if (enableRun) {
-                fetch('/jenkins/run').then((response) => {
-                  if (response.status === 500) {
-                    alert('Something is not right');
-                  } else {
-                    window.alert(
-                      'Test execution job has been queued successfully!'
-                    );
-                    setEnableRun(false);
-                  }
-                });
-              } else {
-                window.alert(
-                  'A run is in progress, please wait until it finishes..'
-                );
-              }
+              return jobQueueHandler();
             },
           },
           {
@@ -136,6 +159,15 @@ export const RunsView: RunsViewComponent = () => {
         search={search}
         showActions={showActions}
         compact={compactView}
+      />
+      <AlertModal
+        open={shouldShowModal}
+        title={alertTitle}
+        message={alertMessage}
+        type={alertType}
+        onClose={() => {
+          setShowModal(false);
+        }}
       />
     </>
   );
